@@ -4,4 +4,5 @@
     <string name="asc">Ascending</string>
     <string name="desc">Descending</string>
     <string name="recent">Recent</string>
+    <string name="placeholder_image_description">Placeholder Image Description</string>
 </resources>
