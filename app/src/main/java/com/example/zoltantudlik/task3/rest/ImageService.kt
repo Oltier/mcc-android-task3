@@ -8,5 +8,5 @@ import retrofit2.http.Url
 
 interface ImageService {
     @GET
-    fun getImages(@Url url: String): Single<List<Image>>
+    fun getImages(@Url path: String): Single<List<Image>>
 }

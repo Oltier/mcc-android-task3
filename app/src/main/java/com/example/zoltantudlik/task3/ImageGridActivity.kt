@@ -2,9 +2,12 @@ package com.example.zoltantudlik.task3
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.GridView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class ImageGridActivity : AppCompatActivity() {
 
@@ -38,9 +41,19 @@ class ImageGridActivity : AppCompatActivity() {
     }
 
     private fun displayImages(url: EditText, id: Int) {
-        val imagesList = imageGridController.getImages(url, id).blockingGet()
-        imageAdapter = ImageAdapter(this, imagesList)
-        gridView.adapter = imageAdapter
+        val imagesList = imageGridController.getImages(url, id)
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { imagesList ->
+                            Log.d("MCC", imagesList.toString())
+                            imageAdapter = ImageAdapter(this, imagesList)
+                            gridView.adapter = imageAdapter
+                        },
+                        {error -> Log.e("MCC", "Request Error", error)}
+                )
+
     }
 
 }
