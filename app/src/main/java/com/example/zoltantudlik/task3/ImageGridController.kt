@@ -17,7 +17,7 @@ class ImageGridController {
 
     fun getImages(editText: EditText, sortButtonId: Int): Single<List<Image>> {
         val fullUrl = URL(editText.text.toString())
-        val baseUrl = "${fullUrl.protocol}://${fullUrl.host}/"
+        val baseUrl = if(fullUrl.port != -1) "${fullUrl.protocol}://${fullUrl.host}:${fullUrl.port}/" else "${fullUrl.protocol}://${fullUrl.host}/"
         val path = fullUrl.path.drop(1)
 
         val gson = GsonBuilder().create()
@@ -37,7 +37,7 @@ class ImageGridController {
             when(sortButtonId) {
                 R.id.sortDes -> images.sortedByDescending { image -> image.author }
                 R.id.sortAsc -> images.sortedBy { image -> image.author }
-                R.id.sortDate -> images.sortedBy { image -> image.date }
+                R.id.sortDate -> images.sortedByDescending { image -> image.date }
                 else -> throw Throwable("Invalid sort parameter $sortButtonId")
             }
         }
